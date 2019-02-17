@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     // Declare instance variables here
 
@@ -28,12 +28,12 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageTableView.delegate = self
         messageTableView.dataSource = self
         
-        //TODO: Set yourself as the delegate of the text field here:
-
+        // Setting self as the delegate of the text field
+        messageTextfield.delegate = self
         
-        
-        //TODO: Set the tapGesture here:
-        
+        // Setting the tapGesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tableViewTapped))
+        messageTableView.addGestureRecognizer(tapGesture)
         
 
         // Registering MessageCell.xib file
@@ -61,7 +61,10 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         return 3
     }
         
-    //TODO: Declare tableViewTapped here:
+    // tableViewTapped defnition (to reduce text edit size)
+    @objc func tableViewTapped() {
+        messageTextfield.endEditing(true)
+    }
     
     
     
@@ -80,12 +83,22 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
 
     
-    //TODO: Declare textFieldDidBeginEditing here:
+    // Declaring textFieldDidBeginEditing, textFieldDidEndEditing
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        // remembering to disambiguate (self) during closures
+        UIView.animate(withDuration: 0.5) {
+            self.heightConstraint.constant = 308
+            self.view.layoutIfNeeded()
+        }
+    }
     
-    
-    
-    
-    //TODO: Declare textFieldDidEndEditing here:
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.5) {
+            self.heightConstraint.constant = 50
+            self.view.layoutIfNeeded()
+        }
+    }
     
 
     
