@@ -2,6 +2,8 @@
 
 # Flash-Chat
 
+Before anything else, here's an addendum to the `Podfile` I'll have to make for the Chameleon (sp?) pod to work correctly and not spit a bunch of errors out at me:
+
 ## Podfile Configuration
 ```
 post_install do |installer|
@@ -13,12 +15,11 @@ post_install do |installer|
 end
 ```
 
+## My Goal
 
-## Our Goal
+One of the most fundamental component of modern iOS apps is the Table View. Table Views are used everywhere from the Mail app to the Messages app. It’s a crucial part of every iOS developer’s tool belt. In this tutorial I’ll be getting to grips with Table Views, creating custom cells, and making my own cloud-based backend database.
 
-One of the most fundamental component of modern iOS apps is the Table View. Table Views are used everywhere from the Mail app to the Messages app. It’s a crucial part of every iOS developer’s tool belt. In this tutorial we’ll be getting to grips with Table Views, creating custom cells, and making our own cloud-based backend database. It’s going to be epic, so buckle up.
-
-## What you will create
+## What I will create
 
 Flash Chat is an internet based messaging app similar to WhatsApp, the popular messaging app that was bought by Facebook for $22 billion. We will be using a service called Firebase as a backend data server to store and retrieve our messages from the cloud. 
 
@@ -27,8 +28,8 @@ Flash Chat is an internet based messaging app similar to WhatsApp, the popular m
 
 ## What you will learn
 
-* How to integrate third party libraries in your app.
-* How to store data in the cloud using Firebase.
+* How to integrate third party libraries in my app.
+* How to store data in the cloud using Firebase (like w/Android projects)
 * How to query the Firebase database.
 * How to use Firebase for user authentication.
 * How to work with a UITableView.
