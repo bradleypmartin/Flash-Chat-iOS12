@@ -11,8 +11,8 @@ import Firebase
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
-    // Declare instance variables here
-
+    // Instance variables
+    var messageArray : [Message] = [Message]()
     
     // We've pre-linked the IBOutlets
     @IBOutlet var heightConstraint: NSLayoutConstraint!
@@ -40,6 +40,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageTableView.register(UINib(nibName: "MessageCell", bundle: nil), forCellReuseIdentifier: "customMessageCell")
 
         configureTableView()
+        
+        retrieveMessages()
     }
 
     ///////////////////////////////////////////
@@ -50,15 +52,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customMessageCell", for: indexPath) as! CustomMessageCell
         
-        let messageArray = ["First message", "Second message", "Third message"]
-        cell.messageBody.text = messageArray[indexPath.row]
+        cell.messageBody.text = messageArray[indexPath.row].messageBody
+        cell.senderUsername.text = messageArray[indexPath.row].messageSender
+        cell.avatarImageView.image = UIImage(named: "egg")
         
         return cell
     }
     
     // declaring numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return messageArray.count
     }
         
     // tableViewTapped defnition (to reduce text edit size)
@@ -135,12 +138,28 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    //TODO: Create the retrieveMessages method here:
-    
-    
-
-    
-    
+    // defining retrieveMessages method (making sure we reference the same `child` as our
+    // `send` method
+    func retrieveMessages() {
+        let messageDB = Database.database().reference().child("Messages")
+        
+        // observing changes in DB
+        messageDB.observe(.childAdded) { (snapshot) in
+            // formatting change into new message, dealing with Any? type,
+            // assuming we're going to get the `dict` we created
+            let snapshotValue = snapshot.value as! Dictionary<String,String>
+            let text = snapshotValue["messageBody"]!
+            let sender = snapshotValue["messageSender"]!
+            
+            let tempMessage : Message = Message()
+            tempMessage.messageBody = text
+            tempMessage.messageSender = sender
+            
+            self.messageArray.append(tempMessage)
+            self.configureTableView()
+            self.messageTableView.reloadData()
+        }
+    }
     
     @IBAction func logOutPressed(_ sender: AnyObject) {
         
